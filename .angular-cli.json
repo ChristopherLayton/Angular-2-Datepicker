@@ -5,28 +5,29 @@
   },
   "apps": [
     {
-      "root": "src",
-      "outDir": "dist",
+      "root": "src/demo",
+      "outDir": "demo-dist",
       "assets": [
         "assets",
         "favicon.ico"
       ],
       "index": "index.html",
       "main": "main.ts",
-      "polyfills": "polyfills.ts",
       "test": "test.ts",
-      "tsconfig": "tsconfig.app.json",
+      "tsconfig": "tsconfig.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
-      "styles": [
-        "styles.css"
-      ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
-      }
+      },
+      "styles" :  [],
+      "scripts": [
+        "../../node_modules/zone.js/dist/zone.js",
+        "../../node_modules/reflect-metadata/Reflect.js"
+      ]
     }
   ],
   "e2e": {
