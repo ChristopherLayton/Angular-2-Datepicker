@@ -7,6 +7,7 @@ import { FormControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from
 
 import { Calendar } from './calendar';
 import * as moment from 'moment';
+const momentJs = (moment as any).default ? (moment as any).default : moment;
 
 interface DateFormatFunction {
   (date: Date): string;
@@ -339,7 +340,7 @@ export class DatepickerComponent implements OnInit, OnChanges, ControlValueAcces
   @Input() disabled: boolean;
   @Input() accentColor: string;
   @Input() altInputStyle: boolean;
-  @Input() dateFormat: string | DateFormatFunction;
+  @Input() dateFormat: string;
   @Input() fontFamily: string;
   @Input() rangeStart: Date;
   @Input() rangeEnd: Date;
@@ -404,9 +405,7 @@ export class DatepickerComponent implements OnInit, OnChanges, ControlValueAcces
     // form controls
     this.yearControl = new FormControl('', Validators.compose([
       Validators.required,
-      Validators.maxLength(4),
-      this.yearValidator,
-      this.inRangeValidator.bind(this)
+      Validators.maxLength(4)
     ]));
   }
 
@@ -511,9 +510,9 @@ export class DatepickerComponent implements OnInit, OnChanges, ControlValueAcces
     let inputText = "";
     const dateFormat: string | DateFormatFunction = this.dateFormat;
     if (dateFormat === undefined || dateFormat === null) {
-      inputText = moment(date).format(this.DEFAULT_FORMAT);
+      inputText = momentJs(date).format(this.DEFAULT_FORMAT);
     } else if (typeof dateFormat === 'string') {
-      inputText = moment(date).format(dateFormat);
+      inputText = momentJs(date).format(dateFormat);
     } else if (typeof dateFormat === 'function') {
       inputText = dateFormat(date);
     }
@@ -530,7 +529,7 @@ export class DatepickerComponent implements OnInit, OnChanges, ControlValueAcces
   onArrowClick(direction: string): void {
     const currentMonth: number = this.currentMonthNumber;
     let newYear: number = this.currentYear;
-    let newMonth: number;
+    let newMonth = 0;
     // sets the newMonth
     // changes newYear is necessary
     if (direction === 'left') {
@@ -550,7 +549,7 @@ export class DatepickerComponent implements OnInit, OnChanges, ControlValueAcces
     }
     // check if new date would be within range
     let newDate = new Date(newYear, newMonth);
-    let newDateValid: boolean;
+    let newDateValid = false;
     if (direction === 'left') {
       newDateValid = !this.rangeStart || newDate.getTime() >= this.rangeStart.getTime();
     } else if (direction === 'right') {
@@ -581,7 +580,7 @@ export class DatepickerComponent implements OnInit, OnChanges, ControlValueAcces
    * @return {Array} The input with the invalid days replaced by 0
    */
   filterInvalidDays(calendarDays: Array<number>): Array<number> {
-    let newCalendarDays = [];
+    let newCalendarDays : any[] = [];
     calendarDays.forEach((day: number | Date) => {
       if (day === 0 || !this.isDateValid(<Date> day)) {
         newCalendarDays.push(0)
@@ -714,34 +713,9 @@ export class DatepickerComponent implements OnInit, OnChanges, ControlValueAcces
   /**
   * Validates that a value is within the 'rangeStart' and/or 'rangeEnd' if specified
   */
-  inRangeValidator(control: FormControl): ValidationResult {
-    const value = control.value;
-
-    if (this.currentMonthNumber) {
-      const tentativeDate = new Date(+value, this.currentMonthNumber);
-      if (this.rangeStart && tentativeDate.getTime() < this.rangeStart.getTime()) {
-        return { 'yearBeforeRangeStart': true };
-      }
-      if (this.rangeEnd && tentativeDate.getTime() > this.rangeEnd.getTime()) {
-        return { 'yearAfterRangeEnd': true };
-      }
-      return null;
-    }
-
-    return { 'currentMonthMissing': true };
-  }
-
   /**
   * Validates that a value is a number greater than or equal to 1970
   */
-  yearValidator(control: FormControl): ValidationResult {
-    const value = control.value;
-    const valid = !isNaN(value) && value >= 1970 && Math.floor(value) === +value;
-    if (valid) {
-      return null;
-    }
-    return { 'invalidYear': true };
-  }
 
   // -------------------------------------------------------------------------------- //
   // --------------------------- Control Value Accessor ----------------------------- //
