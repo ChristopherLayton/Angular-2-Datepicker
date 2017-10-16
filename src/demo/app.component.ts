@@ -3,27 +3,6 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'my-app',
   template: `
-      <material-datepicker
-        [(date)]="date"
-        (onSelect)="onSelect($event)"
-        dateFormat="YYYY-MM-DD"
-        [rangeEnd]="testRangeDate"
-      ></material-datepicker>
-
-      <button (click)="setToday()">today</button>
-      <button (click)="clearDate()">reset</button>
-      <hr>
-      {{ date }}
-      <p>
-      Mirror(disabled, DD-MM-YYYY):
-      <material-datepicker
-        placeholder="nothing is selected"
-        disabled="true"
-        [(date)]="date"
-        [dateFormat]="formatDate"
-      ></material-datepicker>
-
-
       <p>Form Sample</p>
       <form (ngSubmit)="submit($event)" #sampleForm="ngForm">
           <material-datepicker
@@ -36,7 +15,7 @@ import { Component, Input } from '@angular/core';
             #testDate="ngModel"
           ></material-datepicker>
           <div [hidden]="testDate.valid">
-            This is not valid 
+            This is not valid
           </div>
            <br/>
           <button type="button" (click)="this.test = null;"> Clear </button>
@@ -44,7 +23,7 @@ import { Component, Input } from '@angular/core';
                 Submit
            </button>
        </form>
-    
+
     TestForm : {{ sampleForm.form.valid }}
 
     `

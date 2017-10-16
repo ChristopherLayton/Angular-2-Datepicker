@@ -18,6 +18,7 @@
 *.sublime-workspace
 
 .ng_build
+demo-dist
 
 # IDE - VSCode
 .vscode/*

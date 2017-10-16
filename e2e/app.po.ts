@@ -5,7 +5,11 @@ export class AppPage {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  isVisible() {
+    return element(by.className('datepicker__calendar__nav')).isDisplayed();
+  }
+
+  clickToOpen() {
+    return element(by.name('testDate')).click();
   }
 }

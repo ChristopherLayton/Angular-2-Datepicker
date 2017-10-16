@@ -329,12 +329,9 @@ export class DatepickerComponent implements OnInit, OnChanges, ControlValueAcces
 
   private dateVal: Date;
   // two way bindings
-  @Output() dateChange = new EventEmitter<Date>();
-
-  @Input() get date(): Date { return this.dateVal; };
+  get date(): Date { return this.dateVal; };
   set date(val: Date) {
     this.dateVal = val;
-    this.dateChange.emit(val);
   }
   // api bindings
   @Input() disabled: boolean;

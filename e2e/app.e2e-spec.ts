@@ -7,8 +7,9 @@ describe('angular-mat-datepicker App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should open the calendar on click', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+    page.clickToOpen()
+    expect(page.isVisible()).toBeTruthy();
   });
 });
